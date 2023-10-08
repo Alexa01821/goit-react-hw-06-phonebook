@@ -18,7 +18,7 @@ export const App = () => {
       </section>
       <section className="contacts">
         <h2 className="contacts-title">Contacts</h2>
-        {contacts.length > 0 ? (
+        {(contacts && contacts.length > 0) ? (
           <Filter />
         ) : (
           Notify.failure('Your phonebook is empty. Add first contact!')
