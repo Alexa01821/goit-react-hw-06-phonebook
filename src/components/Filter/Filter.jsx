@@ -1,6 +1,13 @@
+import { useDispatch } from 'react-redux';
 import { FilterContainer } from './FilterStyled';
+import { setValueFilter } from 'redux/filtersSlice';
 
-export const Filter = ({ filter, getFilterData }) => {
+export const Filter = () => {
+  const dispatch = useDispatch();
+
+  const getFilterData = ({ target: { value } }) => {
+    dispatch(setValueFilter(value));
+  };
   return (
     <FilterContainer>
       <label className="filter-label">
@@ -9,10 +16,9 @@ export const Filter = ({ filter, getFilterData }) => {
           className="filter-input"
           type="text"
           name="filter"
-          value={filter}
           onChange={getFilterData}
         />
-      </label>{' '}
+      </label>
     </FilterContainer>
   );
 };

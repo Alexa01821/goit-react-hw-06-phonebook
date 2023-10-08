@@ -1,36 +1,29 @@
-import { useState } from 'react';
-import { Form } from './FormRegistrationStyled';
-import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { FormSection } from './FormRegistrationStyled';
+import { getContacts } from 'redux/selectors';
 import { Notify } from 'notiflix';
+import { addContact } from 'redux/contactsSlice';
 
-export const FormRegistration = ({ addContactData }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const FormRegistration = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
-  const getContactData = ({ target: { value, name } }) => {
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        Notify.failure('Ops..');
-    }
-  };
-  const addContact = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const id = nanoid();
-    addContactData({ id, name, number });
-    setName('');
-    setNumber('');
+    const form = event.target;
+    const name = event.target.name.value;
+    const number = event.target.number.value;
+    const isTrue = contacts.some(contact => contact.name === name);
+    isTrue
+      ? Notify.failure(`${name} is already in contacts`)
+      : dispatch(addContact({ name, number }));
+    form.reset();
   };
 
   return (
-    <Form onSubmit={addContact}>
+    <FormSection>
       <h2 className="contact-registration-title">Registration</h2>
-      <div className="contact-registration">
+      <form className="contact-registration" onSubmit={handleSubmit}>
         <label className="contact-registration-label">
           Name
           <input
@@ -40,8 +33,6 @@ export const FormRegistration = ({ addContactData }) => {
             pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             autoComplete="off"
-            value={name}
-            onChange={getContactData}
             required
           />
         </label>
@@ -54,72 +45,13 @@ export const FormRegistration = ({ addContactData }) => {
             pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             autoComplete="off"
-            onChange={getContactData}
-            value={number}
             required
           />
         </label>
-      </div>
-      <button type="submit" className="contact-registration-btn">
-        Add contact
-      </button>
-    </Form>
+        <button type="submit" className="contact-registration-btn">
+          Add contact
+        </button>
+      </form>
+    </FormSection>
   );
 };
-// export class FormRegistration extends Component {
-//   state = {
-//     name: '',
-//     number: '',
-//   };
-//   getContactData = event => {
-//     const idContact = nanoid();
-//     this.setState({ id: idContact });
-//     const { name, value } = event.target;
-//     this.setState({ [name]: value });
-//   };
-//   addContact = event => {
-//     event.preventDefault();
-//     this.props.addContactData(this.state);
-//     this.setState({ name: '', number: '' });
-//   };
-//   render() {
-//     return (
-//       <Form onSubmit={this.addContact}>
-//         <h2 className="contact-registration-title">Registration</h2>
-//         <div className="contact-registration">
-//           <label className="contact-registration-label">
-//             Name
-//             <input
-//               className="contact-registration-input"
-//               type="text"
-//               name="name"
-//               pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-//               title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-//               autoComplete="off"
-//               value={this.state.name}
-//               onChange={this.getContactData}
-//               required
-//             />
-//           </label>
-//           <label className="contact-registration-label">
-//             Number
-//             <input
-//               className="contact-registration-input"
-//               type="tel"
-//               name="number"
-//               pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-//               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-//               autoComplete="off"
-//               onChange={this.getContactData}
-//               value={this.state.number}
-//               required
-//             />
-//           </label>
-//         </div>
-//         <button type="submit" className="contact-registration-btn">
-//           Add contact
-//         </button>
-//       </Form>
-//     );
-//   }
-// }

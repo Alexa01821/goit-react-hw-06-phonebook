@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
+export const FormSection = styled.section`
   .contact-registration-title {
     font-size: 20px;
     line-height: 1.25;
@@ -38,16 +38,16 @@ export const Form = styled.form`
         }
       }
     }
-  }
-  .contact-registration-btn {
-    height: 30px;
-    margin: 16px auto;
-    background-color: var(--color-iris);
-    border-radius: 6px;
-    color: var(--color-modal);
-    border: 0;
-    &:focus {
-      outline: 0;
+    .contact-registration-btn {
+      height: 30px;
+      margin: 16px auto;
+      background-color: var(--color-iris);
+      border-radius: 6px;
+      color: var(--color-modal);
+      border: 0;
+      &:focus {
+        outline: 0;
+      }
     }
   }
 `;
