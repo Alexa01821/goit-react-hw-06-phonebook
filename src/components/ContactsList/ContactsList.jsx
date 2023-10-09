@@ -5,8 +5,8 @@ import { getContacts, getFilter } from 'redux/selectors';
 
 const getVisibleContacts = (contacts, valueFilter) => {
   if (valueFilter !== null || valueFilter !== '') {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(valueFilter.toLowerCase().trim())
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(valueFilter.toLowerCase().trim())
     );
   }
 };
